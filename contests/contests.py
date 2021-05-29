@@ -52,4 +52,5 @@ class ContestsCog(commands.Cog):
             channel_id = await self.config.guild(ctx.guild).posting_channel()
             channel = ctx.guild.get_channel(channel_id)
             tempfile = await ctx.message.attachments[0].read()
-            await channel.send(content=tempfile)
+            discordfile = discord.File(fp=tempfile)
+            await channel.send(file=discordfile)
