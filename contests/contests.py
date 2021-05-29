@@ -3,6 +3,7 @@ import discord
 import io
 import mimetypes
 import hashlib
+import json
 from redbot.core import Config, checks, commands
 
 class ContestsCog(commands.Cog):
@@ -53,9 +54,14 @@ class ContestsCog(commands.Cog):
             channel = ctx.guild.get_channel(channel_id)
             tempfile = await ctx.message.attachments[0].read()
             extension = mimetypes.guess_extension(ctx.message.attachments[0].content_type)
+            author = ctx.message.author
             await ctx.message.delete()
             filehash = hashlib.md5(tempfile)
             filename = filehash.hexdigest()
             complete_name = f"{filename}{extension}"
             discordfile = discord.File(filename=complete_name, fp=(io.BytesIO(tempfile)))
-            await channel.send(file=discordfile)
+            await channel.send(content=filename, file=discordfile)
+            mapping = [
+                filename: author
+            ]
+            await channel.send(content=(json.dumps(mapping)))
