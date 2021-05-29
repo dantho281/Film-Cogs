@@ -55,6 +55,7 @@ class ContestsCog(commands.Cog):
             tempfile = await ctx.message.attachments[0].read()
             extension = mimetypes.guess_extension(ctx.message.attachments[0].content_type)
             author = ctx.message.author.name
+            author_id = ctx.message.author.id
             await ctx.message.delete()
             filehash = hashlib.md5(tempfile)
             filename = filehash.hexdigest()
@@ -63,6 +64,7 @@ class ContestsCog(commands.Cog):
             await channel.send(content=filename, file=discordfile)
             mapping = {
                 "author": author,
+                "author_id": author_id,
                 "filename": filename
             }
             await channel.send(content=(json.dumps(mapping)))
