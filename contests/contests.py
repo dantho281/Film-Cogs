@@ -55,7 +55,8 @@ class ContestsCog(commands.Cog):
             channel = ctx.guild.get_channel(channel_id)
             tempfile = await ctx.message.attachments[0].read()
             extension = mimetypes.guess_extension(ctx.message.attachments[0].content_type)
-            filename = hashlib.md5(tempfile)
+            filehash = hashlib.md5(tempfile)
+            filename = filehash.hexdigest()
             complete_name = f"{filename}.{extension}"
             discordfile = discord.File(filename=complete_name, fp=(io.BytesIO(tempfile)))
             await channel.send(file=discordfile)
