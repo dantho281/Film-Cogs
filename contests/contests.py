@@ -51,5 +51,6 @@ class ContestsCog(commands.Cog):
             #await ctx.message.delete()
             channel_id = await self.config.guild(ctx.guild).posting_channel()
             channel = ctx.guild.get_channel(channel_id)
+            tempfile = bytes()
             await ctx.message.attachments[0].read(tempfile)
             await channel.send(content=tempfile)
