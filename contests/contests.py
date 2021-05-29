@@ -1,5 +1,6 @@
 """discord red-bot contests"""
 import discord
+import io.BufferedIOBase
 from redbot.core import Config, checks, commands
 
 class ContestsCog(commands.Cog):
@@ -50,4 +51,6 @@ class ContestsCog(commands.Cog):
             #await ctx.message.delete()
             channel_id = await self.config.guild(ctx.guild).posting_channel()
             channel = ctx.guild.get_channel(channel_id)
-            await channel.send(content=ctx.message.attachments[0].filename)
+            tempfile = io.BufferedIOBase
+            await ctx.message.attachments[0].save(tempfile.write())
+            await channel.send(content=tempfile.read())
