@@ -1,6 +1,6 @@
 """discord red-bot contests"""
 import discord
-import io.BufferedIOBase
+import io
 from redbot.core import Config, checks, commands
 
 class ContestsCog(commands.Cog):
