@@ -46,8 +46,8 @@ class ContestsCog(commands.Cog):
         - `[p]contests submit <link to image or attach an image>`
         """
         async with ctx.channel.typing():
-            attachments = await files_from_attach(ctx.message.id, use_cached=False, images_only=True)
-            await ctx.message.delete()
+            #ctx.message.Attachment
+            #await ctx.message.delete()
             channel_id = await self.config.guild(ctx.guild).posting_channel()
             channel = ctx.guild.get_channel(channel_id)
-            await channel.send(files=attachments)
+            await channel.send(content=ctx.message.Attachment.filename
