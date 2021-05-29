@@ -62,7 +62,7 @@ class ContestsCog(commands.Cog):
             discordfile = discord.File(filename=complete_name, fp=(io.BytesIO(tempfile)))
             await channel.send(content=filename, file=discordfile)
             mapping = [
-                "author": author
+                "author": author,
                 "filename": filename
             ]
             await channel.send(content=(json.dumps(mapping)))
