@@ -54,7 +54,7 @@ class ContestsCog(commands.Cog):
             channel = ctx.guild.get_channel(channel_id)
             tempfile = await ctx.message.attachments[0].read()
             extension = mimetypes.guess_extension(ctx.message.attachments[0].content_type)
-            author = ctx.message.author
+            author = ctx.message.author.name
             await ctx.message.delete()
             filehash = hashlib.md5(tempfile)
             filename = filehash.hexdigest()
