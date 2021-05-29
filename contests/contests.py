@@ -15,24 +15,24 @@ class ContestsCog(commands.Cog):
 
         self.config.register_guild(**default_guild_config)
 
-        @commands.group(name="contest")
-        async def _contests(self, ctx):
-            pass
+    @commands.group(name="contest")
+    async def _contests(self, ctx):
+        pass
 
-        @commands.guild_only()
-        @checks.mod()
-        @_contests.command(name="setchannel")
-        async def set_posting_channel(self, ctx, channel: discord.TextChannel):
-            """Set the submission posting channel for this server.
+    @commands.guild_only()
+    @checks.mod()
+    @_contests.command(name="setchannel")
+    async def set_posting_channel(self, ctx, channel: discord.TextChannel):
+        """Set the submission posting channel for this server.
 
-            Usage:
-            - `[p]contests setchannel <channel>`
-            """
-            await self.config.guild(ctx.guild).posting_channel.set(channel.id)
-            check_value = await self.config.guild(ctx.guild).posting_channel()
-            sucess_embed = discord.Embed(
-                title="Submissions channel set!",
-                description=f"Submissions channel set to <#{check_value}>",
-                colour=await ctx.embed_colour()
-            )
-            await ctx.send(embed=success_embed)
+        Usage:
+        - `[p]contests setchannel <channel>`
+        """
+        await self.config.guild(ctx.guild).posting_channel.set(channel.id)
+        check_value = await self.config.guild(ctx.guild).posting_channel()
+        sucess_embed = discord.Embed(
+            title="Submissions channel set!",
+            description=f"Submissions channel set to <#{check_value}>",
+            colour=await ctx.embed_colour()
+        )
+        await ctx.send(embed=success_embed)
