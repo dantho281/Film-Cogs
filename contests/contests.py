@@ -37,7 +37,7 @@ class ContestsCog(commands.Cog):
         )
         await ctx.send(embed=success_embed)
 
-    @commands.guild_only
+    @commands.guild_only()
     @_contests.command(name="submit")
     async def submit_entry(self, ctx):
         """Submit a contest entry
