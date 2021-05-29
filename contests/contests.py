@@ -30,7 +30,7 @@ class ContestsCog(commands.Cog):
         """
         await self.config.guild(ctx.guild).posting_channel.set(channel.id)
         check_value = await self.config.guild(ctx.guild).posting_channel()
-        sucess_embed = discord.Embed(
+        success_embed = discord.Embed(
             title="Submissions channel set!",
             description=f"Submissions channel set to <#{check_value}>",
             colour=await ctx.embed_colour()
