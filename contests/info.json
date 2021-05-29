@@ -1,0 +1,14 @@
+{
+    "author": [
+        "dantho"
+    ],
+    "short": "Cog to control photo contests",
+    "description": "Cog controlling contest submission and voting",
+    "disabled": false,
+    "name": "contests",
+    "tags": [
+        "photography",
+        "contests"
+    ]
+    "install_msg": "Thank you for installing."
+}
