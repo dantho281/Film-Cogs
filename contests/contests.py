@@ -1,6 +1,8 @@
 """discord red-bot contests"""
 import discord
 import io
+import mimetypes
+import hashlib
 from redbot.core import Config, checks, commands
 
 class ContestsCog(commands.Cog):
@@ -52,5 +54,8 @@ class ContestsCog(commands.Cog):
             channel_id = await self.config.guild(ctx.guild).posting_channel()
             channel = ctx.guild.get_channel(channel_id)
             tempfile = await ctx.message.attachments[0].read()
-            discordfile = discord.File(fp=(io.BytesIO(tempfile)))
+            extension = minetypes.guess_extension(ctx.message.attachments[0].content_type)
+            filename = hashlib.md5(tempfile)
+            complete_name = f"{filename}.{extension}"
+            discordfile = discord.File(filename=complete_name, fp=(io.BytesIO(tempfile)))
             await channel.send(file=discordfile)
