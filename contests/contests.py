@@ -49,12 +49,11 @@ class ContestsCog(commands.Cog):
         - `[p]contests submit <link to image or attach an image>`
         """
         async with ctx.channel.typing():
-            #ctx.message.Attachment
-            #await ctx.message.delete()
             channel_id = await self.config.guild(ctx.guild).posting_channel()
             channel = ctx.guild.get_channel(channel_id)
             tempfile = await ctx.message.attachments[0].read()
             extension = mimetypes.guess_extension(ctx.message.attachments[0].content_type)
+            await ctx.message.delete()
             filehash = hashlib.md5(tempfile)
             filename = filehash.hexdigest()
             complete_name = f"{filename}{extension}"
