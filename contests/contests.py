@@ -36,3 +36,18 @@ class ContestsCog(commands.Cog):
             colour=await ctx.embed_colour()
         )
         await ctx.send(embed=success_embed)
+
+    @commands.guild_only
+    @_contests.command(name="submit")
+    async def submit_entry(self, ctx):
+        """Submit a contest entry
+
+        Usage:
+        - `[p]contests submit <link to image or attach an image>`
+        """
+        async with ctx.channel.typing():
+            attachments = await files_from_attach(ctx.message.id, use_cached=False, images_only=True)
+            await ctx.message.delete()
+            channel_id = await self.config.guild(ctx.guild).posting_channel()
+            channel = ctx.guild.get_channel(channel_id)
+            await channel.send(files=attachments)
