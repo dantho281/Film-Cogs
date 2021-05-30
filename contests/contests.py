@@ -46,7 +46,7 @@ class ContestsCog(commands.Cog):
         """Draws a winner for the contest
 
         Usage:
-        - `[p]contests draw <post_id`
+        - `[p]contests draw <post_id>`
         """
         async with ctx.channel.typing():
             contests_database_temp = await self.config.guild(ctx.guild).contests_database()
@@ -64,7 +64,7 @@ class ContestsCog(commands.Cog):
         """Submit a contest entry
 
         Usage:
-        - `[p]contests submit <link to image or attach an image>`
+        - `[p]contests submit <attach an image>`
         """
         async with ctx.channel.typing():
             channel_id = await self.config.guild(ctx.guild).posting_channel()
