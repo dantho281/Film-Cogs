@@ -67,4 +67,4 @@ class ContestsCog(commands.Cog):
                 "author_id": author_id,
                 "filename": filename
             }
-            await channel.send(content=(json.dumps(mapping)))
+            await channel.send(content=f"@{author_id}")
