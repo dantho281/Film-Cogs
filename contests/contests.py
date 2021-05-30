@@ -128,9 +128,9 @@ class ContestsCog(commands.Cog):
         async with ctx.channel.typing():
             contests_database_temp = await self.config.guild(ctx.guild).contests_database()
             channel = ctx.guild.get_channel(ctx.message.channel.id)
-            if len(ctx.attachments) > 0:
-                tempfile = await ctx.attachments[0].read()
-                mimetype = ctx.attachments[0].content_type
+            if len(ctx.message.attachments) > 0:
+                tempfile = await ctx.message.attachments[0].read()
+                mimetype = ctx.message.attachments[0].content_type
                 if "image/" in mimetype:
                     filehash = hashlib.md5(tempfile)
                 else:
@@ -183,7 +183,7 @@ class ContestsCog(commands.Cog):
                     else:
                         complete_name = f"{filename}{extension}"
                         discordfile = discord.File(filename=complete_name, fp=(io.BytesIO(tempfile)))
-                        await channel.send(content=filename, file=discordfile)
+                        await channel.send(file=discordfile)
                         contests_database_temp[filename] = {
                             "author": author,
                             "author_id": author_id,
