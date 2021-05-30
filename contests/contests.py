@@ -85,5 +85,4 @@ class ContestsCog(commands.Cog):
                 "author_id": author_id,
             }
             await self.config.guild(ctx.guild).contests_database.set(contests_database_temp)
-            await channel.send(content=f"<@{contests_database_temp[filename]['author_id']}>")
 
