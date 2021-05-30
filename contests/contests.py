@@ -41,6 +41,18 @@ class ContestsCog(commands.Cog):
         )
         await ctx.send(embed=success_embed)
 
+    @_contests.command(name="draw")
+    async def draw_entry(self, ctx, entry_id)
+        """Draws a winner for the contest
+
+        Usage:
+        - `[p]contests draw <post_id`
+        """
+        contests_database_temp = await self.config.guild(ctx.guild).contests_database()
+        await channel.send(content=f"{contests_database_temp[entry_id]['author_id']}")
+
+
+
     @commands.guild_only()
     @_contests.command(name="submit")
     async def submit_entry(self, ctx):
@@ -71,3 +83,4 @@ class ContestsCog(commands.Cog):
             }
             await self.config.guild(ctx.guild).contests_database.set(contests_database_temp)
             await channel.send(content=f"<@{contests_database_temp[filename]['author_id']}>")
+
