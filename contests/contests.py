@@ -14,7 +14,8 @@ class ContestsCog(commands.Cog):
         self.config = Config.get_conf(self, identifier=879255658497795933747566)
 
         default_guild_config = {
-            "posting_channel": None
+            "posting_channel": None,
+            "contests_database": []
         }
 
         self.config.register_guild(**default_guild_config)
@@ -62,9 +63,11 @@ class ContestsCog(commands.Cog):
             complete_name = f"{filename}{extension}"
             discordfile = discord.File(filename=complete_name, fp=(io.BytesIO(tempfile)))
             await channel.send(content=filename, file=discordfile)
-            mapping = {
+            contests_database = await self.config.guild(ctx.guild).contests_database()
+            contests_database[filename] = {
                 "author": author,
                 "author_id": author_id,
                 "filename": filename
             }
-            await channel.send(content=f"<@{author_id}>")
+            await self.config.guild(ctx.guild).contests_database.set(contests_database)
+            await channel.send(content=f"<@{contests_database[filename]['author_id']}>")
