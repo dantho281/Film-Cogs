@@ -27,7 +27,7 @@ class ContestsCog(commands.Cog):
             return
         await error_channel.send(content="Well I got this far(notbot)")
         listen_channel = await self.config.guild(ctx.guild).listen_channel()
-        if ctx.channel.id is not listen_channel:
+        if ctx.channel.id != listen_channel:
             return
         await error_channel.send(content="Well I got this far")
         async with ctx.channel.typing():
