@@ -22,12 +22,13 @@ class ContestsCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, ctx: discord.Message):
+        error_channel = ctx.guild.get_channel(ctx.channel.id)
         if ctx.author.bot or not ctx.guild:
             return
+        await error_channel.send(content="Well I got this far(notbot)")
         listen_channel = await self.config.guild(ctx.guild).listen_channel()
         if ctx.channel.id is not listen_channel:
             return
-        error_channel = ctx.guild.get_channel(ctx.channel.id)
         await error_channel.send(content="Well I got this far")
         async with ctx.channel.typing():
             channel_id = await self.config.guild(ctx.guild).posting_channel()
