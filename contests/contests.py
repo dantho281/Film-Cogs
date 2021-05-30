@@ -24,7 +24,7 @@ class ContestsCog(commands.Cog):
     async def on_message(self, ctx: discord.Message):
         if ctx.author.bot or not ctx.guild:
             return
-        if ctx.channel.id is not await self.config.guild(ctx.guild).listen_channel:
+        if ctx.channel.id is not await self.config.guild(ctx.guild).listen_channel():
             return
         error_channel = ctx.guild.get_channel(ctx.channel.id)
         await error_channel.send(content="Well I got this far")
