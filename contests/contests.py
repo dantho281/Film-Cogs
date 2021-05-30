@@ -70,7 +70,7 @@ class ContestsCog(commands.Cog):
             channel_id = await self.config.guild(ctx.guild).posting_channel()
             channel = ctx.guild.get_channel(channel_id)
             error_channel = ctx.guild.get_channel(ctx.message.channel.id)
-            if ctx.message.attachments is not None:
+            if len(ctx.message.attachments) > 0:
                 tempfile = await ctx.message.attachments[0].read()
                 mimetype = ctx.message.attachments[0].content_type
                 if "image/" in mimetype:
