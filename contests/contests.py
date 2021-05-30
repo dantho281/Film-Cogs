@@ -15,7 +15,6 @@ class ContestsCog(commands.Cog):
 
         default_guild_config = {
             "posting_channel": None,
-            "contests_database": {}
         }
 
         self.config.register_guild(**default_guild_config)
