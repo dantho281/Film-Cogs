@@ -62,7 +62,9 @@ class ContestsCog(commands.Cog):
             complete_name = f"{filename}{extension}"
             discordfile = discord.File(filename=complete_name, fp=(io.BytesIO(tempfile)))
             await channel.send(content=filename, file=discordfile)
-            #contests_database_temp = await self.config.guild(ctx.guild).contests_database()
+            contests_database_temp = await self.config.guild(ctx.guild).contests_database()
+            if type(contests_database_temp) is not dict:
+                contests_database_temp = {}
             contests_database_temp[filename] = {
                 "author": author,
                 "author_id": author_id,
