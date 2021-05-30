@@ -119,19 +119,29 @@ class ContestsCog(commands.Cog):
         await ctx.send(embed=success_embed)
 
     @_contests.command(name="draw")
-    async def draw_entry(self, ctx, entry_id):
+    async def draw_entry(self, ctx):
         """Draws a winner for the contest
 
         Usage:
-        - `[p]contests draw <post_id>`
+        - `[p]contests draw <attach image>`
         """
         async with ctx.channel.typing():
             contests_database_temp = await self.config.guild(ctx.guild).contests_database()
             channel = ctx.guild.get_channel(ctx.message.channel.id)
-            try:
-                await channel.send(content=f"<@{contests_database_temp[entry_id]['author_id']}>")
-            except:
-                await channel.send(content="Invalid post ID provided, please check again.")
+            if len(ctx.attachments) > 0:
+                tempfile = await ctx.attachments[0].read()
+                mimetype = ctx.attachments[0].content_type
+                if "image/" in mimetype:
+                    filehash = hashlib.md5(tempfile)
+                else:
+                    await channel.send(content="Non-image uploaded.")
+                    return
+                try:
+                    await channel.send(content=f"<@{contests_database_temp[filehash]['author_id']}>")
+                except:
+                    await channel.send(content="Invalid image provided, please check again.")
+            else:
+                await channel.send(content="Please attach an image.")
 
     @commands.guild_only()
     @_contests.command(name="submit")
