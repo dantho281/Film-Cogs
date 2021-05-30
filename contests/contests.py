@@ -42,7 +42,7 @@ class ContestsCog(commands.Cog):
         await ctx.send(embed=success_embed)
 
     @_contests.command(name="draw")
-    async def draw_entry(self, ctx, entry_id)
+    async def draw_entry(self, ctx, entry_id):
         """Draws a winner for the contest
 
         Usage:
