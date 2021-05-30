@@ -3,13 +3,13 @@ import discord
 import io
 import mimetypes
 import hashlib
-import json
 from redbot.core import Config, checks, commands
+
 
 class ContestsCog(commands.Cog):
     """Contests Cog"""
 
-    def __init__(self,bot):
+    def __init__(self, bot):
         self.bot = bot
         self.config = Config.get_conf(self, identifier=879255658497795933747566)
 
@@ -55,8 +55,6 @@ class ContestsCog(commands.Cog):
                 await channel.send(content=f"<@{contests_database_temp[entry_id]['author_id']}>")
             except:
                 await channel.send(content="Invalid post ID provided, please check again.")
-
-
 
     @commands.guild_only()
     @_contests.command(name="submit")
