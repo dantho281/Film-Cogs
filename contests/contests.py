@@ -73,39 +73,38 @@ class ContestsCog(commands.Cog):
             if ctx.message.attachments is not None:
                 tempfile = await ctx.message.attachments[0].read()
                 mimetype = ctx.message.attachments[0].content_type
-                if "image/" not in mimetype:
+                if "image/" in mimetype:
+                    extension = mimetypes.guess_extension(mimetype)
+                    author = ctx.message.author.name
+                    author_id = ctx.message.author.id
+                    try:
+                        await ctx.message.delete()
+                    except:
+                        await error_channel.send(
+                            content="Unable to delete submission request automatically, please delete your post yourself.",
+                            delete_after=60,
+                            reference=ctx.message,
+                            mention_author=True
+                        )
+                    filehash = hashlib.md5(tempfile)
+                    filename = filehash.hexdigest()
+                    complete_name = f"{filename}{extension}"
+                    discordfile = discord.File(filename=complete_name, fp=(io.BytesIO(tempfile)))
+                    await channel.send(content=filename, file=discordfile)
+                    contests_database_temp = await self.config.guild(ctx.guild).contests_database()
+                    if type(contests_database_temp) is not dict:
+                        contests_database_temp = {}
+                    contests_database_temp[filename] = {
+                        "author": author,
+                        "author_id": author_id,
+                    }
+                    await self.config.guild(ctx.guild).contests_database.set(contests_database_temp)
+                else:
                     await error_channel.send(
                         content="Please upload an image, not another type of file.",
                         reference=ctx.message,
                         mention_author=True
                     )
-                    break
-                else:
-                     extension = mimetypes.guess_extension(mimetype)
-                     author = ctx.message.author.name
-                     author_id = ctx.message.author.id
-                     try:
-                         await ctx.message.delete()
-                     except:
-                         await error_channel.send(
-                             content="Unable to delete submission request automatically, please delete your post yourself.",
-                             delete_after=60,
-                             reference=ctx.message,
-                             mention_author=True
-                         )
-                     filehash = hashlib.md5(tempfile)
-                     filename = filehash.hexdigest()
-                     complete_name = f"{filename}{extension}"
-                     discordfile = discord.File(filename=complete_name, fp=(io.BytesIO(tempfile)))
-                     await channel.send(content=filename, file=discordfile)
-                     contests_database_temp = await self.config.guild(ctx.guild).contests_database()
-                     if type(contests_database_temp) is not dict:
-                         contests_database_temp = {}
-                     contests_database_temp[filename] = {
-                         "author": author,
-                         "author_id": author_id,
-                     }
-                     await self.config.guild(ctx.guild).contests_database.set(contests_database_temp)
             else:
                 await error_channel.send(
                     content="Submission failed. Please attach an image to your message.",
