@@ -50,9 +50,11 @@ class ContestsCog(commands.Cog):
         """
         async with ctx.channel.typing():
             contests_database_temp = await self.config.guild(ctx.guild).contests_database()
-            channel_id = await self.config.guild(ctx.guild).posting_channel()
-            channel = ctx.guild.get_channel(channel_id)
-            await channel.send(content=f"<@{contests_database_temp[entry_id]['author_id']}>")
+            channel = ctx.guild.get_channel(ctx.message.channel.id)
+            try:
+                await channel.send(content=f"<@{contests_database_temp[entry_id]['author_id']}>")
+            except:
+                await channel.send(content="Invalid post ID provided, please check again.")
 
 
 
