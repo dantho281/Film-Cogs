@@ -21,29 +21,29 @@ class ContestsCog(commands.Cog):
         self.config.register_guild(**default_guild_config)
 
     @commands.Cog.listener()
-    async def on_message(self, ctx):
-        if ctx.message.author.bot or not ctx.message.guild:
+    async def on_message(self, ctx: discord.Message):
+        if ctx.author.bot or not ctx.guild:
             return
-        if ctx.message.channel.id is not await self.config.guild(ctx.guild).listen_channel:
+        if ctx.channel.id is not await self.config.guild(ctx.guild).listen_channel:
             return
         async with ctx.channel.typing():
             channel_id = await self.config.guild(ctx.guild).posting_channel()
             channel = ctx.guild.get_channel(channel_id)
-            error_channel = ctx.guild.get_channel(ctx.message.channel.id)
-            if len(ctx.message.attachments) > 0:
-                tempfile = await ctx.message.attachments[0].read()
-                mimetype = ctx.message.attachments[0].content_type
+            error_channel = ctx.guild.get_channel(ctx.channel.id)
+            if len(ctx.attachments) > 0:
+                tempfile = await ctx.attachments[0].read()
+                mimetype = ctx.attachments[0].content_type
                 if "image/" in mimetype:
                     extension = mimetypes.guess_extension(mimetype)
-                    author = ctx.message.author.name
-                    author_id = ctx.message.author.id
+                    author = ctx.author.name
+                    author_id = ctx.author.id
                     try:
-                        await ctx.message.delete()
+                        await ctx.delete()
                     except:
                         await error_channel.send(
                             content="Unable to delete submission request automatically, please delete your post yourself.",
                             delete_after=60,
-                            reference=ctx.message,
+                            reference=ctx,
                             mention_author=True
                         )
                     filehash = hashlib.md5(tempfile)
@@ -67,13 +67,13 @@ class ContestsCog(commands.Cog):
                 else:
                     await error_channel.send(
                         content="Please upload an image, not another type of file.",
-                        reference=ctx.message,
+                        reference=ctx,
                         mention_author=True
                     )
             else:
                 await error_channel.send(
                     content="Submission failed. Please attach an image to your message.",
-                    reference=ctx.message,
+                    reference=ctx,
                     mention_author=True
                 )
 
