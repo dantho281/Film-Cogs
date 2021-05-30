@@ -88,17 +88,22 @@ class ContestsCog(commands.Cog):
                         )
                     filehash = hashlib.md5(tempfile)
                     filename = filehash.hexdigest()
-                    complete_name = f"{filename}{extension}"
-                    discordfile = discord.File(filename=complete_name, fp=(io.BytesIO(tempfile)))
-                    await channel.send(content=filename, file=discordfile)
                     contests_database_temp = await self.config.guild(ctx.guild).contests_database()
                     if type(contests_database_temp) is not dict:
                         contests_database_temp = {}
-                    contests_database_temp[filename] = {
-                        "author": author,
-                        "author_id": author_id,
-                    }
-                    await self.config.guild(ctx.guild).contests_database.set(contests_database_temp)
+                    if contests_database_temp[filename] is None:
+                        complete_name = f"{filename}{extension}"
+                        discordfile = discord.File(filename=complete_name, fp=(io.BytesIO(tempfile)))
+                        await channel.send(content=filename, file=discordfile)
+                        contests_database_temp[filename] = {
+                            "author": author,
+                            "author_id": author_id,
+                        }
+                        await self.config.guild(ctx.guild).contests_database.set(contests_database_temp)
+                    else:
+                        await error_channel.send(
+                            content=f"<@{author_id}> this image has been submitted previously, duplicate submissions are not allowed."
+                        )
                 else:
                     await error_channel.send(
                         content="Please upload an image, not another type of file.",
