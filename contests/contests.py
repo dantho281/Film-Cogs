@@ -100,14 +100,14 @@ class ContestsCog(commands.Cog):
         await ctx.send(embed=success_embed)
 
     @_contests.command(name="setlistenchannel")
-    async def set_posting_channel(self, ctx, channel: discord.TextChannel):
+    async def set_listening_channel(self, ctx, channel: discord.TextChannel):
         """Set the submission listening channel for this server.
 
         Usage:
         - `[p]contests setlistenchannel <channel>`
         """
-        await self.config.guild(ctx.guild).posting_channel.set(channel.id)
-        check_value = await self.config.guild(ctx.guild).listening_channel()
+        await self.config.guild(ctx.guild).listen_channel.set(channel.id)
+        check_value = await self.config.guild(ctx.guild).listen_channel()
         success_embed = discord.Embed(
             title="Listening channel set!",
             description=f"Listening channel set to <#{check_value}>",
