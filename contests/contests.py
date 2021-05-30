@@ -26,10 +26,11 @@ class ContestsCog(commands.Cog):
             return
         if ctx.channel.id is not await self.config.guild(ctx.guild).listen_channel:
             return
+        error_channel = ctx.guild.get_channel(ctx.channel.id)
+        await error_channel.send(content="Well I got this far")
         async with ctx.channel.typing():
             channel_id = await self.config.guild(ctx.guild).posting_channel()
             channel = ctx.guild.get_channel(channel_id)
-            error_channel = ctx.guild.get_channel(ctx.channel.id)
             if len(ctx.attachments) > 0:
                 tempfile = await ctx.attachments[0].read()
                 mimetype = ctx.attachments[0].content_type
