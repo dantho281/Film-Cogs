@@ -52,7 +52,7 @@ class ContestsCog(commands.Cog):
             contests_database_temp = await self.config.guild(ctx.guild).contests_database()
             channel_id = await self.config.guild(ctx.guild).posting_channel()
             channel = ctx.guild.get_channel(channel_id)
-            await channel.send(content=f"{contests_database_temp[entry_id]['author_id']}")
+            await channel.send(content=f"<@{contests_database_temp[entry_id]['author_id']}>")
 
 
 
