@@ -93,7 +93,6 @@ class ContestsCog(commands.Cog):
                         reference=ctx,
                         mention_author=True
                         )
-                )
 
 
     @commands.group(name="contest")
