@@ -74,11 +74,15 @@ class ContestsCog(commands.Cog):
                         mention_author=True
                     )
             else:
-                await error_channel.send(
-                    content="Submission failed. Please attach an image to your message.",
-                    reference=ctx,
-                    mention_author=True
-                )
+                try:
+                    await ctx.delete()
+                except:
+                    pass
+                #await error_channel.send(
+                #    content="Submission failed. Please attach an image to your message.",
+                #    reference=ctx,
+                #    mention_author=True
+                #)
 
     @commands.group(name="contest")
     async def _contests(self, ctx):
