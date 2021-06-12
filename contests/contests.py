@@ -45,7 +45,7 @@ class ContestsCog(commands.Cog):
                     except:
                         await error_channel.send(
                             content="Unable to delete submission request automatically, please delete your post yourself.",
-                            delete_after=60,
+                            delete_after=20,
                             reference=ctx,
                             mention_author=True
                         )
@@ -70,7 +70,7 @@ class ContestsCog(commands.Cog):
                 else:
                     await error_channel.send(
                         content="Please upload an image, not another type of file.",
-                        delete_after=60,
+                        delete_after=20,
                         reference=ctx,
                         mention_author=True
                     )
@@ -79,7 +79,7 @@ class ContestsCog(commands.Cog):
                     except:
                         await error_channel.send(
                             content="Unable to delete submission request automatically, please delete your post yourself.",
-                            delete_after=60,
+                            delete_after=20,
                             reference=ctx,
                             mention_author=True
                         )
@@ -89,7 +89,7 @@ class ContestsCog(commands.Cog):
                 except:
                     await error_channel.send(
                         content="Unable to delete submission request automatically, please delete your post yourself.",
-                        delete_after=60,
+                        delete_after=20,
                         reference=ctx,
                         mention_author=True
                         )
@@ -172,7 +172,7 @@ class ContestsCog(commands.Cog):
                     except:
                         await error_channel.send(
                             content="Unable to delete submission request automatically, please delete your post yourself.",
-                            delete_after=60,
+                            delete_after=20,
                             reference=ctx.message,
                             mention_author=True
                         )
