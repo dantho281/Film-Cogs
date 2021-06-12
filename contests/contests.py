@@ -70,6 +70,7 @@ class ContestsCog(commands.Cog):
                 else:
                     await error_channel.send(
                         content="Please upload an image, not another type of file.",
+                        delete_after=60,
                         reference=ctx,
                         mention_author=True
                     )
