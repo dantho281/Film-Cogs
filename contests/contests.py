@@ -94,6 +94,7 @@ class ContestsCog(commands.Cog):
                         )
                 )
 
+
     @commands.group(name="contest")
     async def _contests(self, ctx):
         pass
