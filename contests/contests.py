@@ -73,16 +73,27 @@ class ContestsCog(commands.Cog):
                         reference=ctx,
                         mention_author=True
                     )
+                    try:
+                        await ctx.delete()
+                    except:
+                        await error_channel.send(
+                            content="Unable to delete submission request automatically, please delete your post yourself.",
+                            delete_after=60,
+                            reference=ctx,
+                            mention_author=True
+                        )
             else:
                 try:
                     await ctx.delete()
                 except:
-                    pass
-                #await error_channel.send(
-                #    content="Submission failed. Please attach an image to your message.",
-                #    reference=ctx,
-                #    mention_author=True
-                #)
+                    await error_channel.send(
+                        content="Unable to delete submission request automatically, please delete your post yourself.",
+                        delete_after=60,
+                        reference=ctx,
+                        mention_author=True
+                        )
+                )
+
 
     @commands.group(name="contest")
     async def _contests(self, ctx):
