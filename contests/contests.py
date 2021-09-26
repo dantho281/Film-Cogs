@@ -148,6 +148,25 @@ class ContestsCog(commands.Cog):
             except:
                 await channel.send(content="Invalid post ID provided, please check again.")
 
+    @_contests.command(name="reset")
+    async def reset_contests(self, ctx):
+        """Reset the current contest records
+
+        Usage:
+        [p]contests reset
+        """
+        error_channel = ctx.guild.get_channel(ctx.message.channel.id)
+        reset_database = {}
+        try:
+            await self.config.guild(ctx.guild).contests_database.set(reset_database)
+        except:
+            await error_channel.send(
+                content="Unable to reset contest.",
+                delete_after=20,
+                reference=ctx.message,
+                mention_author=True
+            )
+
     @commands.guild_only()
     @_contests.command(name="submit")
     async def submit_entry(self, ctx):
