@@ -236,3 +236,16 @@ class ContestsCog(commands.Cog):
                     mention_author=True
                 )
 
+    @_contests.command(name="delete")
+    async def remove_entry(self, ctx, entry_id):
+        """Remove your contest entry
+
+        - `[p]contests remove <file hash>`
+        """
+        contests_database_temp = await self.config.guild(ctx.guild)
+        author = contests_database_temp[entry_id][author_id]
+        if ctx.message.author.id == author:
+            # Do Shit
+        else:
+            # Not your entry
+
