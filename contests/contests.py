@@ -61,10 +61,12 @@ class ContestsCog(commands.Cog):
                     else:
                         complete_name = f"{filename}{extension}"
                         discordfile = discord.File(filename=complete_name, fp=(io.BytesIO(tempfile)))
-                        await channel.send(content=filename, file=discordfile)
+                        submission_message = await channel.send(content=filename, file=discordfile)
                         contests_database_temp[filename] = {
                             "author": author,
                             "author_id": author_id,
+                            "message_id": submission_message.id,
+                            "message_link": submission_message.jump_url,
                         }
                         await self.config.guild(ctx.guild).contests_database.set(contests_database_temp)
                 else:
