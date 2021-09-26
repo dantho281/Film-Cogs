@@ -159,6 +159,12 @@ class ContestsCog(commands.Cog):
         reset_database = {}
         try:
             await self.config.guild(ctx.guild).contests_database.set(reset_database)
+            await error_channel.send(
+                content="Reset contest successfully..",
+                delete_after=20,
+                reference=ctx.message,
+                mention_author=True
+            )
         except:
             await error_channel.send(
                 content="Unable to reset contest.",
