@@ -246,6 +246,8 @@ class ContestsCog(commands.Cog):
         author = contests_database_temp[entry_id][author_id]
         if ctx.message.author.id == author:
             # Do Shit
+            pass
         else:
             # Not your entry
+            pass
 
