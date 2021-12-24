@@ -65,6 +65,11 @@ class ContestsCog(commands.Cog):
                         contests_database_temp[filename] = {
                             "author": author,
                             "author_id": author_id,
+                            "votes": {
+                                "one": [],
+                                "two": [],
+                                "three": [],
+                            },
                         }
                         await self.config.guild(ctx.guild).contests_database.set(contests_database_temp)
                         await message.add_reaction('1️⃣')
@@ -97,6 +102,36 @@ class ContestsCog(commands.Cog):
                         mention_author=True
                         )
 
+    @commands.Cog.listener()
+    async def on_raw_reaction_add(self, payload: discord.RawReactionActionEvent):
+        if payload.guild_id is None:
+            # this is a DM
+            return
+
+        if payload.member.bot:
+            # Don't operate on bot reacts
+            return
+
+        guild = self.bot.get_guild(payload.guild_id)
+        operating_channel = await self.config.guild(guild).posting_channel()
+        if payload.channel_id != operating_channel:
+            # Only operate inside the contest channel
+            return
+
+        channel = guild.get_channel(payload.channel_id)
+        message = await channel.fetch_message(payload.message_id)
+
+        if str(payload.emoji) == "1️⃣" or str(payload.emoji) == "2️⃣" or str(payload.emoji) == "3️⃣":
+            entries = await self.config.guild(guild).contests_database()
+            if str(payload.emoji) == "1️⃣":
+                entries[message.content]['votes']['one'].append(payload.user_id)
+                await self.config.guild(guild).contests_database.set(entries)
+            if str(payload.emoji) == "2️⃣":
+                entries[message.content]['votes']['two'].append(payload.user_id)
+                await self.config.guild(guild).contests_database.set(entries)
+            if str(payload.emoji) == "3️⃣":
+                entries[message.content]['votes']['three'].append(payload.user_id)
+                await self.config.guild(guild).contests_database.set(entries)
 
     @commands.group(name="contest")
     async def _contests(self, ctx):
