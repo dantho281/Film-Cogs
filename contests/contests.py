@@ -61,12 +61,15 @@ class ContestsCog(commands.Cog):
                     else:
                         complete_name = f"{filename}{extension}"
                         discordfile = discord.File(filename=complete_name, fp=(io.BytesIO(tempfile)))
-                        await channel.send(content=filename, file=discordfile)
+                        message = await channel.send(content=filename, file=discordfile)
                         contests_database_temp[filename] = {
                             "author": author,
                             "author_id": author_id,
                         }
                         await self.config.guild(ctx.guild).contests_database.set(contests_database_temp)
+                        await message.add_reaction('1️⃣')
+                        await message.add_reaction('2️⃣')
+                        await message.add_reaction('3️⃣')
                 else:
                     await error_channel.send(
                         content="Please upload an image, not another type of file.",
