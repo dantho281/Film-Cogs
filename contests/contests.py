@@ -118,11 +118,17 @@ class ContestsCog(commands.Cog):
             # Only operate inside the contest channel
             return
 
-        channel = guild.get_channel(payload.channel_id)
-        message = await channel.fetch_message(payload.message_id)
-
         if str(payload.emoji) == "1️⃣" or str(payload.emoji) == "2️⃣" or str(payload.emoji) == "3️⃣":
+            channel = guild.get_channel(payload.channel_id)
+            message = await channel.fetch_message(payload.message_id)
             entries = await self.config.guild(guild).contests_database()
+            reaction = {
+                "guild": guild,
+                "emote": str(payload.emoji),
+                "user": payload.user_id,
+                "message": message,
+                "entries": entries
+            }
             if str(payload.emoji) == "1️⃣":
                 entries[message.content]['votes']['one'].append(payload.user_id)
                 await self.config.guild(guild).contests_database.set(entries)
@@ -132,6 +138,17 @@ class ContestsCog(commands.Cog):
             if str(payload.emoji) == "3️⃣":
                 entries[message.content]['votes']['three'].append(payload.user_id)
                 await self.config.guild(guild).contests_database.set(entries)
+
+    def check_duplicate_reaction(reaction):
+        # Check if you've already voted on this entry
+        # Check if you've already put this vote on another entry
+
+    def replace_vote(vote):
+        # Structure of vote:
+        # path to old vote
+        # path to new vote
+        # user id
+
 
     @commands.group(name="contest")
     async def _contests(self, ctx):
