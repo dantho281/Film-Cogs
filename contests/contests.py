@@ -6,6 +6,22 @@ import hashlib
 from redbot.core import Config, checks, commands
 
 
+class ReactionVote:
+    def __init__(self, guild, emote, user, message, entries):
+        self.guild = guild
+        self.emote = emote
+        self.user = user
+        self.message = message
+        self.entries = entries
+
+
+class ReplaceVote:
+    def __init__(self, old_vote, new_vote, user_id):
+        self.old_vote = old_vote
+        self.new_vote = new_vote
+        self.user_id = user_id
+
+
 class ContestsCog(commands.Cog):
     """Contests Cog"""
 
@@ -122,13 +138,13 @@ class ContestsCog(commands.Cog):
             channel = guild.get_channel(payload.channel_id)
             message = await channel.fetch_message(payload.message_id)
             entries = await self.config.guild(guild).contests_database()
-            reaction = {
-                "guild": guild,
-                "emote": str(payload.emoji),
-                "user": payload.user_id,
-                "message": message,
-                "entries": entries
-            }
+            reaction = ReactionVote(
+                guild,
+                str(payload.emoji),
+                payload.user_id,
+                message,
+                entries
+            )
             if str(payload.emoji) == "1️⃣":
                 entries[message.content]['votes']['one'].append(payload.user_id)
                 await self.config.guild(guild).contests_database.set(entries)
@@ -141,6 +157,10 @@ class ContestsCog(commands.Cog):
 
     def check_duplicate_reaction(reaction):
         # Check if you've already voted on this entry
+        for vote in ["one", "two", "three"]:
+            if reaction.entries[reaction.message.content]["votes"][vote][reaction.user]:
+                replace_vote(vote)
+                break
         # Check if you've already put this vote on another entry
 
     def replace_vote(vote):
