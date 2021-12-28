@@ -7,7 +7,8 @@ from redbot.core import Config, checks, commands
 
 
 class ReactionVote:
-    def __init__(self, guild, emote, user, message, entries):
+    def __init__(self, bot, guild, emote, user, message, entries):
+        self.bot = bot
         self.guild = guild
         self.emote = emote
         self.user = user
@@ -16,10 +17,13 @@ class ReactionVote:
 
 
 class ReplaceVote:
-    def __init__(self, old_vote, new_vote, user_id):
+    def __init__(self, bot, old_vote, new_vote, user_id, entries, guild):
+        self.bot = bot
         self.old_vote = old_vote
         self.new_vote = new_vote
         self.user_id = user_id
+        self.entries = entries
+        self.guild = guild
 
 
 class ContestsCog(commands.Cog):
@@ -139,6 +143,7 @@ class ContestsCog(commands.Cog):
             message = await channel.fetch_message(payload.message_id)
             entries = await self.config.guild(guild).contests_database()
             reaction = ReactionVote(
+                self,
                 guild,
                 str(payload.emoji),
                 payload.user_id,
@@ -155,20 +160,32 @@ class ContestsCog(commands.Cog):
                 entries[message.content]['votes']['three'].append(payload.user_id)
                 await self.config.guild(guild).contests_database.set(entries)
 
+    def replace_vote(vote):
+        del vote.entries[vote.message.content]["votes"][vote.old_vote][vote.old_vote.index(vote.user_id)]
+        vote.entries = [vote.message.content]["votes"][vote.new_vote].append(vote.user_id)
+        await vote.bot.config.guild(vote.guild).contests_database.set(vote.entries)
+
     def check_duplicate_reaction(reaction):
+        if str(reaction.emote) == "1️⃣":
+            newvote = "one"
+        if str(reaction.emote) == "2️⃣":
+            newvote = "two"
+        if str(reaction.emote) == "3️⃣":
+            newvote = "three"
         # Check if you've already voted on this entry
-        for vote in ["one", "two", "three"]:
-            if reaction.entries[reaction.message.content]["votes"][vote][reaction.user]:
-                replace_vote(vote)
+        for rating in ["one", "two", "three"]:
+            if reaction.entries[reaction.message.content]["votes"][rating][reaction.user]:
+                vote = ReplaceVote(
+                    reaction.bot,
+                    reaction.entries[reaction.message.content]["votes"][rating].
+                    reaction.entries[reaction.message.content]["votes"][newvote],
+                    reaction.user,
+                    reaction.entries,
+                    reaction.guild
+                )
+                ContestsCog.replace_vote(vote)
                 break
         # Check if you've already put this vote on another entry
-
-    def replace_vote(vote):
-        # Structure of vote:
-        # path to old vote
-        # path to new vote
-        # user id
-
 
     @commands.group(name="contest")
     async def _contests(self, ctx):
