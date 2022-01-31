@@ -160,10 +160,15 @@ class ContestsCog(commands.Cog):
                 entries[message.content]['votes']['three'].append(payload.user_id)
                 await self.config.guild(guild).contests_database.set(entries)
 
-    def replace_vote(vote):
-        del vote.entries[vote.message.content]["votes"][vote.old_vote][vote.old_vote.index(vote.user_id)]
-        vote.entries = [vote.message.content]["votes"][vote.new_vote].append(vote.user_id)
-        await vote.bot.config.guild(vote.guild).contests_database.set(vote.entries)
+    def replace_vote(vote, old_vote=None):
+        if old_vote is None:
+            del vote.entries[vote.message.content]["votes"][vote.old_vote][vote.old_vote.index(vote.user_id)]
+            vote.entries = [vote.message.content]["votes"][vote.new_vote].append(vote.user_id)
+            await vote.bot.config.guild(vote.guild).contests_database.set(vote.entries)
+        if old_vote is not None:
+            del old_vote.old_vote[vote.old_vote.index(vote.user_id)]
+            vote.entries = [vote.message.content]["votes"][vote.new_vote].append(vote.user_id)
+            await vote.bot.config.guild(vote.guild).contests_database.set(vote.entries)
 
     def check_duplicate_reaction(reaction):
         if str(reaction.emote) == "1️⃣":
@@ -186,6 +191,26 @@ class ContestsCog(commands.Cog):
                 ContestsCog.replace_vote(vote)
                 break
         # Check if you've already put this vote on another entry
+        for entry in reaction.entries:
+            if entry["votes"][newvote][reaction.user]:
+                vote = ReplaceVote(
+                    reaction.bot,
+                    reaction.entries[reaction.message.content]["votes"][rating].
+                    reaction.entries[reaction.message.content]["votes"][newvote],
+                    reaction.user,
+                    reaction.entries,
+                    reaction.guild
+                )
+                old_vote = ReplaceVote(
+                    reaction.bot,
+                    entry["votes"][rating],
+                    reaction.entries[reaction.message.content]["votes"][newvote],
+                    reaction.user,
+                    reaction.entries,
+                    reaction.guild
+                )
+                ContestsCog.replace_vote(vote, old_vote)
+                break
 
     @commands.group(name="contest")
     async def _contests(self, ctx):
