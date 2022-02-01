@@ -160,14 +160,14 @@ class ContestsCog(commands.Cog):
                 entries[message.content]['votes']['three'].append(payload.user_id)
                 await self.config.guild(guild).contests_database.set(entries)
 
-    def replace_vote(vote, old_vote=None):
+    async def replace_vote(vote, old_vote=None):
         if old_vote is None:
             del vote.entries[vote.message.content]["votes"][vote.old_vote][vote.old_vote.index(vote.user_id)]
-            vote.entries = [vote.message.content]["votes"][vote.new_vote].append(vote.user_id)
+            vote.entries[vote.message.content]["votes"][vote.new_vote].append(vote.user_id)
             await vote.bot.config.guild(vote.guild).contests_database.set(vote.entries)
         if old_vote is not None:
             del old_vote.old_vote[vote.old_vote.index(vote.user_id)]
-            vote.entries = [vote.message.content]["votes"][vote.new_vote].append(vote.user_id)
+            vote.entries[vote.message.content]["votes"][vote.new_vote].append(vote.user_id)
             await vote.bot.config.guild(vote.guild).contests_database.set(vote.entries)
 
     def check_duplicate_reaction(reaction):
