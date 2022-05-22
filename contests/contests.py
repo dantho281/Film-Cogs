@@ -150,16 +150,18 @@ class ContestsCog(commands.Cog):
                 message,
                 entries
             )
-            if str(payload.emoji) == "1️⃣":
-                entries[message.content]['votes']['one'].append(payload.user_id)
-                await self.config.guild(guild).contests_database.set(entries)
-            if str(payload.emoji) == "2️⃣":
-                entries[message.content]['votes']['two'].append(payload.user_id)
-                await self.config.guild(guild).contests_database.set(entries)
-            if str(payload.emoji) == "3️⃣":
-                entries[message.content]['votes']['three'].append(payload.user_id)
-                await self.config.guild(guild).contests_database.set(entries)
-            await message.remove_reaction(str(payload.emoji), payload.member)
+            
+            if not check_duplicate_reaction(reaction):
+                if str(payload.emoji) == "1️⃣":
+                    entries[message.content]['votes']['one'].append(payload.user_id)
+                    await self.config.guild(guild).contests_database.set(entries)
+                if str(payload.emoji) == "2️⃣":
+                    entries[message.content]['votes']['two'].append(payload.user_id)
+                    await self.config.guild(guild).contests_database.set(entries)
+                if str(payload.emoji) == "3️⃣":
+                    entries[message.content]['votes']['three'].append(payload.user_id)
+                    await self.config.guild(guild).contests_database.set(entries)
+                await message.remove_reaction(str(payload.emoji), payload.member)
 
     async def replace_vote(vote, old_vote=None):
         if old_vote is None:
@@ -172,6 +174,8 @@ class ContestsCog(commands.Cog):
             await vote.bot.config.guild(vote.guild).contests_database.set(vote.entries)
 
     def check_duplicate_reaction(reaction):
+        duplicate_reaction = False
+        
         if str(reaction.emote) == "1️⃣":
             newvote = "one"
         if str(reaction.emote) == "2️⃣":
@@ -190,6 +194,7 @@ class ContestsCog(commands.Cog):
                     reaction.guild
                 )
                 ContestsCog.replace_vote(vote)
+                duplicate_reaction = True
                 break
         # Check if you've already put this vote on another entry
         for entry in reaction.entries:
@@ -211,7 +216,10 @@ class ContestsCog(commands.Cog):
                     reaction.guild
                 )
                 ContestsCog.replace_vote(vote, old_vote)
+                duplicate_reaction = True
                 break
+                
+        return duplicate_reaction
 
     @commands.group(name="contest")
     async def _contests(self, ctx):
