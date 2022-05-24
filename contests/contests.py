@@ -150,6 +150,7 @@ class ContestsCog(commands.Cog):
                 message,
                 entries
             )
+            await message.remove_reaction(str(payload.emoji), payload.member)  # TODO: Remove this line
             
             if not check_duplicate_reaction(reaction):
                 if str(payload.emoji) == "1️⃣":
