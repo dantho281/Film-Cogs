@@ -161,7 +161,7 @@ class ContestsCog(commands.Cog):
                 if str(payload.emoji) == "3️⃣":
                     entries[message.content]['votes']['three'].append(payload.user_id)
                     await self.config.guild(guild).contests_database.set(entries)
-                await message.remove_reaction(str(payload.emoji), payload.member)
+            await message.remove_reaction(str(payload.emoji), payload.member)
 
     async def replace_vote(vote, old_vote=None):
         if old_vote is None:
