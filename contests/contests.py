@@ -142,6 +142,7 @@ class ContestsCog(commands.Cog):
             channel = guild.get_channel(payload.channel_id)
             message = await channel.fetch_message(payload.message_id)
             entries = await self.config.guild(guild).contests_database()
+            await message.remove_reaction(str(payload.emoji), payload.member)  # TODO: Remove this line
             reaction = ReactionVote(
                 self,
                 guild,
