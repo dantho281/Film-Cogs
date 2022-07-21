@@ -152,7 +152,7 @@ class ContestsCog(commands.Cog):
             )
             await message.remove_reaction(str(payload.emoji), payload.member)  # TODO: Remove this line
             
-            if not check_duplicate_reaction(reaction):
+            if not check_duplicate_reaction(guild, payload):
                 if str(payload.emoji) == "1️⃣":
                     entries[message.content]['votes']['one'].append(payload.user_id)
                     await self.config.guild(guild).contests_database.set(entries)
@@ -174,8 +174,21 @@ class ContestsCog(commands.Cog):
             vote.entries[vote.message.content]["votes"][vote.new_vote].append(vote.user_id)
             await vote.bot.config.guild(vote.guild).contests_database.set(vote.entries)
 
-    def check_duplicate_reaction(reaction):
+    def check_duplicate_reaction(guild, payload):
         duplicate_reaction = False
+        
+        # Re-initiate the reaction for... Discord reasons
+        channel = guild.get_channel(payload.channel_id)
+        message = await channel.fetch_message(payload.message_id)
+        entries = await self.config.guild(guild).contests_database()
+        reaction = ReactionVote(
+            self,
+            guild,
+            str(payload.emoji),
+            payload.user_id,
+            message,
+            entries
+        )
         
         if str(reaction.emote) == "1️⃣":
             newvote = "one"
