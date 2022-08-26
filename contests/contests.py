@@ -152,7 +152,7 @@ class ContestsCog(commands.Cog):
             )
             await message.remove_reaction(str(payload.emoji), payload.member)  # TODO: Remove this line
             
-            if not check_duplicate_reaction(reaction):
+            if not ContestsCog.check_duplicate_reaction(reaction):
                 if str(payload.emoji) == "1️⃣":
                     entries[message.content]['votes']['one'].append(payload.user_id)
                     await self.config.guild(guild).contests_database.set(entries)
