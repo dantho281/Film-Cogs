@@ -209,7 +209,6 @@ class ContestsCog(commands.Cog):
             sys.stderr.write("fock me \n")
             sys.stderr.write(str(reaction.entries))
             sys.stderr.write("\n")
-            sys.stderr.write(reaction.entries[reaction.message.content]["votes"][rating][reaction.user])
             sys.stderr.write("\n")
 
             if not check_duplicate_reaction(reaction):
