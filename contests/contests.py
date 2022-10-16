@@ -184,6 +184,7 @@ class ContestsCog(commands.Cog):
             newvote = "three"
         # Check if you've already voted on this entry
         for rating in ["one", "two", "three"]:
+            print(reaction.entries)
             if reaction.entries[reaction.message.content]["votes"][rating][reaction.user]:
                 vote = ReplaceVote(
                     reaction.bot,
