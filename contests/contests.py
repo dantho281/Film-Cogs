@@ -155,6 +155,7 @@ class ContestsCog(commands.Cog):
             
         
             sys.stderr.write("fock me \n")
+            sys.stderr.write(str(reaction.entries)
             
             if not check_duplicate_reaction(reaction):
                 if str(payload.emoji) == "1️⃣":
