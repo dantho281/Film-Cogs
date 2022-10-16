@@ -152,6 +152,9 @@ class ContestsCog(commands.Cog):
                 entries
             )
             
+            print('fock me')
+            print(reaction.entries)
+            
             if not check_duplicate_reaction(reaction):
                 if str(payload.emoji) == "1️⃣":
                     entries[message.content]['votes']['one'].append(payload.user_id)
