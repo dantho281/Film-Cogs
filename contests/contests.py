@@ -3,6 +3,7 @@ import discord
 import io
 import mimetypes
 import hashlib
+import sys
 from redbot.core import Config, checks, commands
 
 global check_duplicate_reaction
@@ -152,8 +153,9 @@ class ContestsCog(commands.Cog):
                 entries
             )
             
-            raise ErrorValue("fock me")
-            raise ErrorValue(reaction.entries)
+        
+            sys.stderr.write(reaction.entries)
+            sys.stderr.write("fock me")
             
             if not check_duplicate_reaction(reaction):
                 if str(payload.emoji) == "1️⃣":
