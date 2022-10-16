@@ -5,6 +5,7 @@ import mimetypes
 import hashlib
 from redbot.core import Config, checks, commands
 
+global check_duplicate_reaction
 
 class ReactionVote:
     def __init__(self, bot, guild, emote, user, message, entries):
