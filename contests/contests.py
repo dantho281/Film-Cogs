@@ -211,15 +211,16 @@ class ContestsCog(commands.Cog):
             sys.stderr.write("\n")
             sys.stderr.write("\n")
 
-            if str(payload.emoji) == "1️⃣":
-                entries[message.content]['votes']['one'].append(payload.user_id)
-                await self.config.guild(guild).contests_database.set(entries)
-            if str(payload.emoji) == "2️⃣":
-                entries[message.content]['votes']['two'].append(payload.user_id)
-                await self.config.guild(guild).contests_database.set(entries)
-            if str(payload.emoji) == "3️⃣":
-                entries[message.content]['votes']['three'].append(payload.user_id)
-                await self.config.guild(guild).contests_database.set(entries)
+            if not check_duplicate_reaction(reaction):
+                if str(payload.emoji) == "1️⃣":
+                    entries[message.content]['votes']['one'].append(payload.user_id)
+                    await self.config.guild(guild).contests_database.set(entries)
+                if str(payload.emoji) == "2️⃣":
+                    entries[message.content]['votes']['two'].append(payload.user_id)
+                    await self.config.guild(guild).contests_database.set(entries)
+                if str(payload.emoji) == "3️⃣":
+                    entries[message.content]['votes']['three'].append(payload.user_id)
+                    await self.config.guild(guild).contests_database.set(entries)
             await message.remove_reaction(str(payload.emoji), payload.member)
 
         async def replace_vote(vote, old_vote=None):
